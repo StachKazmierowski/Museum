@@ -1,0 +1,87 @@
+body
+{
+  background-color: #e0e0eb;
+  color: #000000;
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+}
+
+#container
+{
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 0;
+  margin-bottom: 25px;
+}
+
+#header
+{
+  display: inline-block;
+  font-size: 75px;
+  margin: 10px;
+  width: 1000px;
+  height: 100px;
+  text-align: center;
+}
+
+#header:hover
+{
+  background-color: #d0d0e1;
+}
+
+a
+{
+  color: #000000;
+  text-decoration: none;
+}
+
+a:hover
+{
+  color: #7575a3;
+  text-decoration: none;
+}
+
+#diagram
+{
+  display: inline-block;
+  margin: 5px;
+  transition: all 0.2s ease-in-out;
+}
+
+#diagram:hover
+{
+  -webkit-transform: scale(1.2) translateY(30px);
+  -ms-transform: scale(1.2) translateY(30px);
+  transform: scale(1.2) translateY(30px);
+  background-color: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px 30px white;
+	-moz-box-shadow: 0px 0px 30px 30px white;
+	box-shadow: 0px 0px 50px 40px white;
+}
+
+#footer
+{
+  margin: 10px;
+  text-align: left;
+  transition: all 1.0s ease-in-out;
+  width: 100px;
+}
+
+#footer:hover
+{
+  background-color: #ff99ff;
+  -webkit-transform: rotate(720deg) scale(4.0) translateY(-10px) translateX(20px);
+  -ms-transform: rotate(720deg) scale(4.0) translateY(-10px) translateX(20px);
+  transform: rotate(720deg) scale(4.0) translateY(-10px) translateX(20px);
+}
+
+#bzee:hover
+{
+  color: white;
+  text-decoration: none;
+}
+
+
+

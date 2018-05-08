@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2018 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="hand-pointer-o" unicode="&#xf25a;" d="M357 779q-29 0-50-21t-21-51v-500l-84 113q-23 30-60 30-29 0-50-21t-21-50q0-24 15-43l214-286q21-29 57-29h401q12 0 22 8t12 19l52 206q13 53 13 108v121q0 23-15 40t-38 16-38-15-16-38h-18v34q0 27-18 45t-44 19q-26 0-44-18t-19-45v-35h-18v50q0 31-20 53t-51 22q-30 0-51-21t-21-51v-53h-17v318q0 31-21 53t-51 22z m0 71q60 0 101-43t42-103v-123q12 1 18 1 55 0 96-38 27 11 56 11 63 0 102-48 15 4 32 4 52 0 88-38t37-90v-121q0-65-16-126l-51-205q-9-36-38-58t-66-23h-401q-33 0-64 15t-50 42l-214 286q-29 38-29 86 0 58 42 100t100 42q39 0 72-19v305q0 59 42 101t101 42z m72-786v215h-18v-215h18z m142 0v215h-17v-215h17z m143 0v215h-18v-215h18z" horiz-adv-x="1000" />
+</font>
+</defs>
+</svg>
