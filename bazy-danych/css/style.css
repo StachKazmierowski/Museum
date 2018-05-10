@@ -47,7 +47,7 @@ a:hover
 {
   display: inline-block;
   margin: 5px;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.18s ease-in-out;
 }
 
 #diagram:hover
