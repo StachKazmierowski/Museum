@@ -12,13 +12,14 @@ Artysta
   imie varchar
   nazwisko varchar
   rokUrodzenia int
-  rokSmierci (może być NULL) int;
+  rokSmierci (może być NULL) int
 
 Galeria
   id int primary key
+  nazwa varchar
 
 Sala
-  numer int
+  nr int
   pojemnosc int
   idGaleria int references Galeria
   primary key (numer, idGaleria)
@@ -26,15 +27,17 @@ Sala
 WystawaObjazdowa
   id int primary key
   miasto varchar
-  dataRozpoczecia date
-  dataZakonczenia date
 
 Ekspozycja
   id int primary key
   idEksponat int references Eksponat
-  idGaleria (może być NULL) int references Galeria
+  idGaleria (może być NULL) int references Sala
   nrSala (może być NULL) int references Sala
   idWystawaObjazdowa (może być NULL) int references Wystawa objazdowa
+  dataRozpoczecia date
+  dataZakonczenia date
+
+
 --reguły poprawności:
 --jeśli idGaleria i nrSala not NULL, to idWystawaObjazdowa NULL
 --jeśli idWystawaObjazdowa not NULL, to idGaleria i nrSala NULL

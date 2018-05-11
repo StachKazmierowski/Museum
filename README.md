@@ -15,7 +15,7 @@ Każdy eksponat jest opisany unikalnym kodem eksponatu (identyfikatorem), tytuł
 
 Każdy eksponat jest dziełem jakiegoś twórcy, ale dla niektórych eksponatów artysta nie jest znany (i raczej już nie będzie). Opis artysty obejmuje unikalne ID (identyfikator), imię i nazwisko, rok urodzenia i rok śmierci (pusty dla artystów żyjących). Baza danych ma przechowywać informacje wyłącznie o tych artystach, których dzieła są własnością muzeum.
 
-Muzeum posiada kilka galerii, w których wystawia eksponaty, organizuje też okazjonalnie wystawy objazdowe. Galeria może mieć kilka numerowanych sal, dla każdej sali określona jest maksymalna liczba obrazów, które można w niej powiesić (,,pojemność'').
+Muzeum posiada kilka galerii, w których wystawia eksponaty, organizuje też okazjonalnie wystawy objazdowe. Galeria ma kilka numerowanych sal, dla każdej sali określona jest maksymalna liczba obrazów, które można w niej powiesić (,,pojemność'').
 
 W każdym momencie eksponat może być więc:
 
