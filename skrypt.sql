@@ -26,7 +26,7 @@ create table Eksponat (
 
 create table Galeria (
   id int primary key,
-  nazwa varchar(20) not null);
+  nazwa varchar(30) not null);
 
 create table Sala (
   nr int not null,
@@ -50,5 +50,4 @@ create table Ekspozycja (
   dataZakonczenia date not null,
   constraint checkEkspozycjaDaty check (dataRozpoczecia <= dataZakonczenia),
   constraint checkEkspozycjaMiejsce check ((idGaleria is null and nrSala is null and idWystawaObjazdowa is not null) or (idGaleria is not null and nrSala is not null and idWystawaObjazdowa is null)));
-
 
