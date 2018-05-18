@@ -61,6 +61,28 @@ a:hover
 	box-shadow: 0px 0px 50px 40px white;
 }
 
+#skrypt
+{
+  margin-left: auto;
+  margin-right: auto;
+  padding: 40px;
+  font-size: 30px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+  transition: all 0.8s ease-in-out;
+  width: 300px;
+  height: 60px;
+}
+
+#skrypt:hover
+{
+  background-color: #d0d0e1;
+  -webkit-transform: rotate(5deg) scale(3.0) translateY(-10px) translateX(20px);
+  -ms-transform: rotate(5deg) scale(3.0) translateY(-10px) translateX(20px);
+  transform: rotate(5deg) scale(3.0) translateY(-10px) translateX(20px);
+}
+
 #footer
 {
   margin: 10px;
