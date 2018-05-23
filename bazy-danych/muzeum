@@ -7,7 +7,7 @@ drop table if exists Artysta cascade;
 
 
 create table Artysta (
-  id int primary key,
+  id serial primary key,
   imie varchar(15) not null,
   nazwisko varchar(15) not null,
   rokUrodzenia int not null,
@@ -15,7 +15,7 @@ create table Artysta (
   constraint checkArtystaDaty check (rokSmierci is NULL or rokUrodzenia <= rokSmierci));
 
 create table Eksponat (
-  id int primary key,
+  id serial primary key,
   tytul varchar(30) not null,
   typ varchar(20) not null,
   wysokosc int not null,
@@ -25,7 +25,7 @@ create table Eksponat (
   constraint checkEksponatWymiary check (wysokosc >= 0 and szerokosc >= 0 and waga > 0));
 
 create table Galeria (
-  id int primary key,
+  id serial primary key,
   nazwa varchar(30) not null);
 
 create table Sala (
@@ -36,11 +36,11 @@ create table Sala (
   constraint checkSalaPojemosc check (pojemnosc >= 0));
 
 create table WystawaObjazdowa (
-  id int primary key,
+  id serial primary key,
   miasto varchar(30) not null);
 
 create table Ekspozycja (
-  id int primary key,
+  id serial primary key,
   idEksponat int not null references Eksponat,
   idGaleria int,
   nrSala int,
