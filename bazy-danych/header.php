@@ -15,18 +15,4 @@
 <body>
 
   <div id="container">
-    
-    <form>
-      <input type="text" placeholder="login" onfocus="this.placeholder=''" onblur="this.placeholder='login'" >
-      
-      <input type="password" placeholder="hasło" onfocus="this.placeholder=''" onblur="this.placeholder='hasło'" >
-      
-      <input type="submit" value="Zaloguj się">
-    </form>
-
-  </div>
-  
-</body>
-
-</html>
 
