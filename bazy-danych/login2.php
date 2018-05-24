@@ -1,22 +1,36 @@
 <?php
-include "./header.php";
+
+$cookie_name = "user";
+if(isset($_COOKIE[$cookie_name])) {
+  include "./header.php";
+
+  echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".\n\n";
+  echo "    <form action=\"appadmin.php\" method=post>\n\n";
+  echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
+  echo "    </form>\n\n";
+  
+  goto footer;
+}
+
+function goBack($message) {
+  echo "    $message\n\n";
+  echo "    <form action=\"javascript:history.back()\" method=post>\n\n";
+  echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n\n";
+  echo "    </form>\n\n";
+}
 
   $login = $_POST["login"];
   if ($login == "") {
-    echo "Podaj login.";
-    echo "    <form action=\"javascript:history.back()\" method=post>\n\n";
-    echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n\n";
-    echo "    </form>\n\n";
+    include "./header.php";
+    goBack("Podaj login.");
     
     goto footer;
   }
 
   $password = $_POST["password"];
   if ($password == "") {
-    echo "Podaj hasło.";
-    echo "    <form action=\"javascript:history.back()\" method=post>\n\n";
-    echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n\n";
-    echo "    </form>\n\n";
+    include "./header.php";
+    goBack("Podaj hasło.");
     
     goto footer;
   }
@@ -27,10 +41,8 @@ include "./header.php";
   $num = pg_numrows($result);
 
   if ($num == 0) {
-    echo "Błędny login.";
-    echo "    <form action=\"javascript:history.back()\" method=post>\n\n";
-    echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n\n";
-    echo "    </form>\n\n";
+    include "./header.php";
+    goBack("Błędny login.");
     
     pg_close($link);
     goto footer;
@@ -39,19 +51,22 @@ include "./header.php";
   $user = pg_fetch_array($result, 0);
     
   if ($password != $user["password"]) {
-    echo "Błędne hasło.";
-    echo "    <form action=\"javascript:history.back()\" method=post>\n\n";
-    echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n\n";
-    echo "    </form>\n\n";
+    include "./header.php";
+    goBack("Błędne hasło.");
     
     pg_close($link);
     goto footer;
   }
 
-  echo "Zalogowano jako " . $user["login"] . ".<br>\n";
+  # cookie
+  $cookie_value = $user["login"];
+  setcookie($cookie_name, $cookie_value, time() + (3600), "/"); # 3600 = 1 hour
+  
+  include "./header.php";
+  
+  echo "Zalogowano jako: " . $user["login"] . ".<br>\n";
 
-
-  echo "    <form action=\"login3.php\" method=post>\n\n";
+  echo "    <form action=\"appadmin.php\" method=post>\n\n";
   echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
   echo "    </form>\n\n";
 

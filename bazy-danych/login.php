@@ -1,8 +1,18 @@
 <?php
 
 include "./header.php";
-    
-echo "    <form action=\"./login2.php\" method=post>\n\n";
+
+$cookie_name = "user";
+if(isset($_COOKIE[$cookie_name])) {
+  echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".\n\n";
+  echo "    <form action=\"appadmin.php\" method=post>\n\n";
+  echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
+  echo "    </form>\n\n";
+  
+  goto footer;
+}
+
+echo "    <form action=\"login2.php\" method=post>\n\n";
 
 echo "      <input type=\"text\" name=\"login\" placeholder=\"login\" onfocus=\"this.placeholder=''\" onblur=\"this.placeholder='login'\" >\n\n";
 
@@ -22,5 +32,6 @@ echo "      }\n";
 echo "    </script>\n\n";
 #
 
+footer:
 include "./footer.php";
 ?>
