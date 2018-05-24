@@ -50,8 +50,13 @@ include "./header.php";
 
   echo "Zalogowano jako " . $user["login"] . ".<br>\n";
   if ($user["isadmin"] == "t") {
-    echo "Posiadasz uprawnienia administratora.\n";
+    echo "Posiadasz uprawnienia administratora.\n\n";
   }
+
+  echo "    <form action=\"login3.php\" method=post>\n\n";
+  echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
+  echo "    </form>\n\n";
+
 
   pg_close($link);
 
