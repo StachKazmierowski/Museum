@@ -22,7 +22,7 @@ include "./header.php";
   }
 
   $link = pg_connect("host=labdb dbname=mrbd user=scott password=tiger");
-  $result = pg_query($link, "select * from users where login = '" . $login . "'");
+  $result = pg_query($link, "select * from kd370826.users where login = '" . $login . "'");
 
   $num = pg_numrows($result);
 
@@ -49,9 +49,7 @@ include "./header.php";
   }
 
   echo "Zalogowano jako " . $user["login"] . ".<br>\n";
-  if ($user["isadmin"] == "t") {
-    echo "Posiadasz uprawnienia administratora.\n\n";
-  }
+
 
   echo "    <form action=\"login3.php\" method=post>\n\n";
   echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
