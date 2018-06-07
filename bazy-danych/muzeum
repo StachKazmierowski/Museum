@@ -5,6 +5,7 @@ drop table if exists WystawaObjazdowa cascade;
 drop table if exists Eksponat cascade;
 drop table if exists Artysta cascade;
 
+--tabele
 
 create table Artysta (
   id serial primary key,
@@ -47,7 +48,7 @@ create table Ekspozycja (
   foreign key (idGaleria, nrSala) references Sala(idGaleria, nr),
   idWystawaObjazdowa int references WystawaObjazdowa,
   dataRozpoczecia date not null,
-  dataZakonczenia date not null,
-  constraint checkEkspozycjaDaty check (dataRozpoczecia <= dataZakonczenia),
-  constraint checkEkspozycjaMiejsce check ((idGaleria is null and nrSala is null and idWystawaObjazdowa is not null) or (idGaleria is not null and nrSala is not null and idWystawaObjazdowa is null)));
+  dataZakonczenia date,
+  constraint checkEkspozycjaDaty check (dataZakonczenia is null or dataRozpoczecia <= dataZakonczenia),
+  constraint checkEkspozycjaMiejsce check ((idGaleria is null and nrSala is null and idWystawaObjazdowa is not null and dataZakonczenia is not null) or (idGaleria is not null and nrSala is not null and idWystawaObjazdowa is null)));
 

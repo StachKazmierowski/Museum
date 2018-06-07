@@ -1,3 +1,5 @@
+--tabele
+
 drop table if exists Ekspozycja cascade;
 drop table if exists Sala cascade;
 drop table if exists Galeria cascade;
@@ -5,7 +7,6 @@ drop table if exists WystawaObjazdowa cascade;
 drop table if exists Eksponat cascade;
 drop table if exists Artysta cascade;
 
---tabele
 
 create table Artysta (
   id serial primary key,
@@ -51,28 +52,4 @@ create table Ekspozycja (
   dataZakonczenia date,
   constraint checkEkspozycjaDaty check (dataZakonczenia is null or dataRozpoczecia <= dataZakonczenia),
   constraint checkEkspozycjaMiejsce check ((idGaleria is null and nrSala is null and idWystawaObjazdowa is not null and dataZakonczenia is not null) or (idGaleria is not null and nrSala is not null and idWystawaObjazdowa is null)));
-
---wyzwalacze
-
---TODO: poprawić
-create or replace function f1 () returns trigger as $$
-begin
-  if (new.idWystawaObjazdowa is null) then
-    return new;
-  end if;
-  select count(dlugosc) into dni from (select dataZakonczenia - dataZakonczenia as dlugosc
-    from Ekspozycja
-    where idWystawaObjazdowa is not null and idEksponat = new.idEksponat) e1;
-  raise notice 'Tu jestem';
-  if (dni + new.dataZakonczenia - new.dataRozpoczecia > 30) then
-    raise exception 'Za duzo';
-  else
-    return new;
-  end if;
-end;
-$$ language plpgsql;
-
-create trigger t1 before insert
- on Ekspozycja for each row
- execute procedure f1();
 

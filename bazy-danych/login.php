@@ -2,10 +2,12 @@
 
 $stylesheet = "login.css";
 $title = "Logowanie";
-include "./header.php";
 
 $cookie_name = "user";
 if(isset($_COOKIE[$cookie_name])) {
+  $style = " style=\"background-color: #e6ffee;\"";
+  include "./header.php";
+
   echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".\n\n";
   echo "    <form action=\"appadmin.php\" method=post>\n\n";
   echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
@@ -13,6 +15,8 @@ if(isset($_COOKIE[$cookie_name])) {
   
   goto footer;
 }
+
+include "./header.php";
 
 echo "    <form action=\"login2.php\" method=post>\n\n";
 
