@@ -1,5 +1,7 @@
 <?php
 
+$stylesheet = "login.css";
+$title = "Logowanie";
 include "./header.php";
 
 $cookie_name = "user";
@@ -14,11 +16,11 @@ if(isset($_COOKIE[$cookie_name])) {
 
 echo "    <form action=\"login2.php\" method=post>\n\n";
 
-echo "      <input type=\"text\" name=\"login\" placeholder=\"login\" onfocus=\"this.placeholder=''\" onblur=\"this.placeholder='login'\" >\n\n";
+echo "      <input type=\"text\" name=\"login\" placeholder=\"login\" onfocus=\"this.placeholder=''\" onblur=\"this.placeholder='login'\" required>\n\n";
 
-echo "      <input type=\"password\" name=\"password\" placeholder=\"hasło\" onfocus=\"this.placeholder=''\" onblur=\"this.placeholder='hasło'\" >\n\n";
+echo "      <input type=\"password\" name=\"password\" placeholder=\"hasło\" onfocus=\"this.placeholder=''\" onblur=\"this.placeholder='hasło'\" required>\n\n";
 # to delete
-echo "      <input type=\"button\" value=\"pls help :(\" onclick=\"message() \" style=\"width: 150px; font-size: 15px; margin-left: 75px; margin-top: 10px;\">";
+echo "      <input type=\"button\" value=\"pls help :(\" onclick=\"message() \" style=\"width: 150px; font-size: 15px; margin-left: 75px; margin-top: 10px;\">\n\n";
 #
 echo "      <input type=\"submit\" name=\"button\" value=\"Zaloguj się\">\n\n";
       

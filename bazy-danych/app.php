@@ -1,8 +1,10 @@
 <?php
 
+$stylesheet = "app.css";
+$title = "Aplikacja dla gościa";
 include "./header.php";
     
-echo "    <font color=\"#660066\">[tu będzie aplikacja dla gościa]</font>\n\n";
+echo "    <font color=\"#660066\" size=\"10\">[tu będzie aplikacja dla gościa]</font>\n\n";
 
 $cookie_name = "user";
 if(isset($_COOKIE[$cookie_name])) {

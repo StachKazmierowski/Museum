@@ -1,5 +1,8 @@
 <?php
 
+$stylesheet = "login.css";
+$title = "Logout";
+
 $cookie_name = "user";
 if(!isset($_COOKIE[$cookie_name])) {
   include "./header.php";

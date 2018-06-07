@@ -9,11 +9,14 @@ body
 #container
 {
   background-color: white;
-  width: 300px;
+  width: 1000px;
   padding: 50px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
+  /** TODO: to delete */
+  text-align: center;
+  
   -webkit-box-shadow: 3px 3px 30px 5px rgba(204,204,204,0.9);
   -moz-box-shadow: 3px 3px 30px 5px rgba(204,204,204,0.9);
   box-shadow: 3px 3px 30px 5px rgba(204,204,204,0.9);
@@ -27,7 +30,7 @@ input
 input[type=text],
 input[type=password]
 {
-  width: 300px;
+  width: 400px;
   background-color: #efefef;
   color: #666;
   border: 2px solid #ddd;
@@ -53,7 +56,7 @@ input[type=password]:focus
 
 input[type=submit]
 {
-  width: 300px;
+  width: 400px;
   background-color: #007bff;
   font-size:20px;
   color: white;

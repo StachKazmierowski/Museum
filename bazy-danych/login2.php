@@ -1,7 +1,11 @@
 <?php
 
+$stylesheet = "login.css";
+
 $cookie_name = "user";
 if(isset($_COOKIE[$cookie_name])) {
+  $title = "Zalogowano";
+  $style = " style=\"background-color: #e6faff;\"";
   include "./header.php";
 
   echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".\n\n";
@@ -20,20 +24,7 @@ function goBack($message) {
 }
 
   $login = $_POST["login"];
-  if ($login == "") {
-    include "./header.php";
-    goBack("Podaj login.");
-    
-    goto footer;
-  }
-
   $password = $_POST["password"];
-  if ($password == "") {
-    include "./header.php";
-    goBack("Podaj hasło.");
-    
-    goto footer;
-  }
 
   $link = pg_connect("host=labdb dbname=mrbd user=scott password=tiger");
   $result = pg_query($link, "select * from kd370826.users where login = '" . $login . "'");
@@ -41,6 +32,8 @@ function goBack($message) {
   $num = pg_numrows($result);
 
   if ($num == 0) {
+    $title = "Nie udało się zalogować";
+    $style = " style=\"background-color: #fff3f0;\"";
     include "./header.php";
     goBack("Błędny login.");
     
@@ -51,6 +44,8 @@ function goBack($message) {
   $user = pg_fetch_array($result, 0);
     
   if ($password != $user["password"]) {
+    $title = "Nie udało się zalogować";
+    $style = " style=\"background-color: #fff3f0;\"";
     include "./header.php";
     goBack("Błędne hasło.");
     
@@ -62,9 +57,11 @@ function goBack($message) {
   $cookie_value = $user["login"];
   setcookie($cookie_name, $cookie_value, time() + (3600), "/"); # 3600 = 1 hour
   
+  $title = "Zalogowano";
+  $style = " style=\"background-color: #e6ffee;\"";
   include "./header.php";
   
-  echo "Zalogowano jako: " . $user["login"] . ".<br>\n";
+  echo "    Zalogowano jako: " . $user["login"] . ".<br>\n";
 
   echo "    <form action=\"appadmin.php\" method=post>\n\n";
   echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
