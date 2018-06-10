@@ -1,5 +1,7 @@
 <?php
 
+$mypassword = ""; # hidden ;)
+
 $stylesheet = "app.css";
 $title = "Aplikacja dla pracownika";
 include "./header.php";
