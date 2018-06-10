@@ -11,15 +11,76 @@ body
   background-color: white;
   width: 1000px;
   padding: 50px;
+  padding-bottom: 40px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 100px;
-  /** TODO: to delete */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  /** TODO: to remove */
   text-align: center;
   
   -webkit-box-shadow: 3px 3px 30px 5px rgba(204,204,204,0.9);
   -moz-box-shadow: 3px 3px 30px 5px rgba(204,204,204,0.9);
   box-shadow: 3px 3px 30px 5px rgba(204,204,204,0.9);
+}
+
+.header
+{
+  display: inline-block;
+  width: 1000px;
+  font-size: 60px;
+  font-weight: 100;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.header:hover
+{
+  background: rgba(242, 242, 242, 0.5);
+}
+
+a
+{
+  color: #000000;
+  text-decoration: none;
+}
+
+.page
+{
+  display: inline-block;
+  font-weight: 100;
+  width: 230px;
+  height: 200px;
+  padding: 5px;
+  font-size: 60px;
+  letter-spacing: 15px;
+  vertical-align: middle;
+  line-height: 85px;
+  background-color: #e6eeff;
+  margin-top: 20px;
+  margin-bottom: 80px;
+  transition: all 0.5s ease;
+}
+
+.page:hover
+{
+  background-color: #ccdcff;
+  border-radius: 40px;
+  font-size: 75px;
+  letter-spacing: 8px;
+}
+
+.tiny
+{
+  width: 300px;
+  margin-left: auto;
+  font-size: 15px;
+}
+
+.tiny input[type=submit]
+{
+  font-size: 15px;
+  width: 250px;
 }
 
 input

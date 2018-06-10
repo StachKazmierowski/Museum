@@ -5,7 +5,7 @@ $title = "Aplikacja dla pracownika";
 include "./header.php";
 
 $cookie_name = "user";
-if(!isset($_COOKIE[$cookie_name])) {
+if (!isset($_COOKIE[$cookie_name])) {
   echo "    <font color=\"red\">Nie jesteś zalogowany!</font>\n\n";
   echo "    <form action=\"javascript:history.back()\" method=post>\n\n";
   echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n\n";

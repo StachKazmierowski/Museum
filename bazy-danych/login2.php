@@ -3,14 +3,14 @@
 $stylesheet = "login.css";
 
 $cookie_name = "user";
-if(isset($_COOKIE[$cookie_name])) {
+if (isset($_COOKIE[$cookie_name])) {
   header("refresh: 2; url = ./appadmin.php");
   
   $title = "Zalogowano";
   $style = " style=\"background-color: #e6faff;\"";
   include "./header.php";
 
-  echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".\n\n";
+  echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".<br>przekierowuję...\n\n";
 #  echo "    <form action=\"appadmin.php\" method=post>\n\n";
 #  echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
 #  echo "    </form>\n\n";
@@ -69,7 +69,7 @@ $title = "Zalogowano";
 $style = " style=\"background-color: #e6ffee;\"";
 include "./header.php";
 
-echo "    Zalogowano jako: " . $user["login"] . ".<br>\n";
+echo "    Zalogowano jako: " . $user["login"] . ".<br>przekierowuję...\n";
 
 #echo "    <form action=\"appadmin.php\" method=post>\n\n";
 #echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
