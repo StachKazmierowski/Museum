@@ -7,10 +7,12 @@ insert into Artysta(id, imie, nazwisko, rokUrodzenia, rokSmierci) values(4, 'Mic
 insert into Artysta(id, imie, nazwisko, rokUrodzenia, rokSmierci) values(5, 'Leonardo', 'da Vinci', 1452, 1519);
 
 
-insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values(1, 'Stańczyk', 'obraz', 88, 120, 35, 1);
-insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values(2, 'Unia lubelska', 'obraz', 298, 512, 83, 1);
+insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values(1, 'Stańczyk', 'obraz', 88, 120, 20, 1);
+insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values(2, 'Unia lubelska', 'obraz', 298, 512, 70, 1);
 insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values(3, 'Dawid', 'rzeźba', 517, 100, 5660, 4);
-
+insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values(4, 'Narodziny Wenus', 'obraz', 173, 279, 45, 2);
+insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values(5, 'Dama z gronostajem', 'obraz', 55, 40, 18, 5);
+insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values(6, 'Ostatnia Wieczerza', 'obraz', 460, 880, 85, 5);
 
 insert into Galeria(id, nazwa) values(1, 'Galeria1');
 insert into Galeria(id, nazwa) values(2, 'Galeria2');

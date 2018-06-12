@@ -1,5 +1,7 @@
 <?php
 
+$mypassword = ""; # hidden ;)
+
 $stylesheet = "login.css";
 
 $cookie_name = "user";
@@ -11,7 +13,7 @@ if (isset($_COOKIE[$cookie_name])) {
   include "./header.php";
 
   echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".<br>przekierowuję...\n\n";
-#  echo "    <form action=\"appadmin.php\" method=post>\n\n";
+#  echo "    <form action=\"./appadmin.php\" method=post>\n\n";
 #  echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
 #  echo "    </form>\n\n";
   
@@ -28,8 +30,8 @@ function goBack($message) {
 $login = $_POST["login"];
 $password = $_POST["password"];
 
-$link = pg_connect("host=labdb dbname=mrbd user=scott password=tiger");
-$result = pg_query($link, "select * from kd370826.users where login = '" . $login . "'");
+$link = pg_connect("host=labdb dbname=mrbd user=kd370826 password=$mypassword");
+$result = pg_query_params($link, "select * from users where login = $1", array($login));
 
 $num = pg_numrows($result);
 
@@ -61,7 +63,7 @@ if ($password != $user["password"]) {
 
 # cookie
 $cookie_value = $user["login"];
-setcookie($cookie_name, $cookie_value, time() + (1800), "/"); # 1800 = 30 minutes
+setcookie($cookie_name, $cookie_value, time() + (1800), "./"); # 1800 = 30 minutes
 
 header("refresh: 2; url = ./appadmin.php");
 
@@ -71,7 +73,7 @@ include "./header.php";
 
 echo "    Zalogowano jako: " . $user["login"] . ".<br>przekierowuję...\n";
 
-#echo "    <form action=\"appadmin.php\" method=post>\n\n";
+#echo "    <form action=\"./appadmin.php\" method=post>\n\n";
 #echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
 #echo "    </form>\n\n";
 

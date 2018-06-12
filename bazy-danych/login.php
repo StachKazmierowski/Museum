@@ -9,7 +9,7 @@ if (isset($_COOKIE[$cookie_name])) {
   include "./header.php";
 
   echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".\n\n";
-  echo "    <form action=\"appadmin.php\" method=post>\n\n";
+  echo "    <form action=\"./appadmin.php\" method=post>\n\n";
   echo "      <input type=\"submit\" name=\"button\" value=\"Dalej\">\n\n";
   echo "    </form>\n\n";
   
@@ -18,7 +18,7 @@ if (isset($_COOKIE[$cookie_name])) {
 
 include "./header.php";
 
-echo "    <form action=\"login2.php\" method=post>\n\n";
+echo "    <form action=\"./login2.php\" method=post>\n\n";
 
 echo "      <input type=\"text\" name=\"login\" placeholder=\"login\" onfocus=\"this.placeholder=''\" onblur=\"this.placeholder='login'\" required>\n\n";
 

@@ -37,6 +37,7 @@ body
 .header:hover
 {
   background: rgba(242, 242, 242, 0.5);
+  cursor: default;
 }
 
 a
@@ -52,13 +53,12 @@ a
   width: 230px;
   height: 200px;
   padding: 5px;
-  font-size: 60px;
+  font-size: 63px;
   letter-spacing: 15px;
   vertical-align: middle;
-  line-height: 85px;
+  line-height: 90px;
   background-color: #e6eeff;
-  margin-top: 20px;
-  margin-bottom: 80px;
+  margin-top: 5px;
   transition: all 0.5s ease;
 }
 
@@ -66,8 +66,30 @@ a
 {
   background-color: #ccdcff;
   border-radius: 40px;
-  font-size: 75px;
   letter-spacing: 8px;
+}
+
+.empty_relation
+{
+  display: inline-block;
+  background-color: #ccdcff;
+  width: 160px;
+  height: 150px;
+  padding: 5px;
+  margin-top: 5px;
+  font-size: 63px;
+  letter-spacing: 15px;
+  vertical-align: middle;
+  line-height: 90px;
+  border-radius: 100px;
+  transition: all 0.5s ease;
+}
+
+.empty_relation:hover
+{
+  background-color: #e6eeff;
+  border-radius: 0px;
+  height: 200px;
 }
 
 table
@@ -77,10 +99,6 @@ table
   margin-right: auto;
 }
 
-/*table, th, td*/
-/*{*/
-/*  border: 1px solid #ddd;*/
-/*}*/
 
 th, td
 {
@@ -89,15 +107,18 @@ th, td
   border-top: 1px solid #ddd;
 }
 
-tr:hover
+.t_th_pointer:hover
 {
-  background-color: rgba(242, 242, 242, 0.4);
+  background-color: rgba(230, 230, 230, 1.0);
+  cursor: pointer;
 }
 
-th:hover
+.t_td_pointer:hover
 {
-  background-color: rgba(242, 242, 242, 0.8);
+  background-color: rgba(242, 242, 242, 0.5);
+  cursor: pointer;
 }
+
 
 .tiny
 {

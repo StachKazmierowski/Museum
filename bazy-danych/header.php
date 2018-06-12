@@ -8,6 +8,7 @@
   
   <link rel="shortcut icon" href="./favicon.ico" />
   <link rel="stylesheet" href="./css/<?php echo $stylesheet;?>" type="text/css" />
+  <script src="./js/<?php echo $script;?>"></script>
   <link rel="stylesheet" href="./css/fontello.css" type="text/css" />
   <link href="https://fonts.googleapis.com/css?family=Raleway:100,400" rel="stylesheet">
 </head>
