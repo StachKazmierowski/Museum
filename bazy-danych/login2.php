@@ -63,7 +63,7 @@ if ($password != $user["password"]) {
 
 # cookie
 $cookie_value = $user["login"];
-setcookie($cookie_name, $cookie_value, time() + (1800), "./"); # 1800 = 30 minutes
+setcookie($cookie_name, $cookie_value, time() + (1800), "/"); # 1800 = 30 minutes # "./" not working on apple devices
 
 header("refresh: 2; url = ./appadmin.php");
 

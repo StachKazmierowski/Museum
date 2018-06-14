@@ -3,11 +3,14 @@
 $mypassword = ""; # hidden ;)
 
 $stylesheet = "app.css";
+$script = "sortTable.js";
 $title = "Aplikacja dla pracownika";
-include "./header.php";
+#include "./header.php";
 
 $cookie_name = "user";
 if (!isset($_COOKIE[$cookie_name])) {
+  include "./header.php";
+  
   echo "    <font color=\"red\">Nie jesteś zalogowany!</font>\n\n";
   echo "    <form action=\"./login.php\" method=post>\n\n";
   echo "      <input type=\"submit\" name=\"button\" value=\"Zaloguj się\">\n\n";
@@ -16,14 +19,496 @@ if (!isset($_COOKIE[$cookie_name])) {
   goto footer;
 }
 else {
-  echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".<br><br>\n\n";
+#  include "./header.php";
+  
+#  echo "    Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . ".<br><br>\n\n";
 }
 
-echo "    <font color=\"#660066\" size=\"10\">[tu będzie aplikacja dla pracownika]</font>\n\n";
 
-echo "    <form action=\"./logout.php\" method=post>\n\n";
-echo "      <input type=\"submit\" name=\"button\" value=\"Wyloguj się\">\n\n";
-echo "    </form>\n\n";
+
+
+#echo "    <font color=\"#660066\" size=\"10\">[tu będzie aplikacja dla pracownika]</font>\n\n";
+
+
+
+
+
+
+
+
+switch ($_GET["table"]) {
+
+
+
+### Eksponaty
+  case "exhibits":
+    $header = "Eksponaty";
+    include "./header.php";
+    echo "    <div class=\"header\">\n      $header\n    </div>\n\n";
+    
+    $link = pg_connect("host=labdb dbname=mrbd user=kd370826 password=$mypassword");
+    
+    switch ($_GET["id"]) {
+    
+    ## index
+      case "":
+        $result = pg_query_params($link, "select *, eksponat.id as ide, artysta.id as ida from eksponat left outer join artysta on eksponat.idtworca = artysta.id order by artysta.nazwisko", array());
+        $num = pg_numrows($result);
+        
+        $tableId = "t_exhibits";
+        echo "    <table id=\"$tableId\">\n";
+        echo "      <tr>\n";
+        echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
+        echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">autor</th>\n";
+        echo "        <th onclick=\"sortTable('$tableId', 2)\" class=\"t_th_pointer\">typ</th>\n";
+        echo "      </tr>\n";
+        
+        for ($i = 0; $i < $num; $i++) {
+          $row = pg_fetch_array($result, $i);
+          # var_dump($row);
+          
+          $ide = $row["ide"];
+          $ida = $row["ida"];
+          echo "      <tr>\n";
+          echo "        <td onclick=\"javascript:location.href='?table=exhibits&id=$ide'\" class=\"t_td_pointer\"><i>" . $row["tytul"] . "</i></td>\n";
+          echo "        <td onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">" . $row["imie"] . " " . $row["nazwisko"] . "</td>\n";
+          echo "        <td>" . $row["typ"] . "</td>\n";
+          echo "      </tr>\n";
+        }
+        
+        echo "    </table>\n";
+        $back = "./appadmin.php";
+        
+        break;
+
+    ## id
+      default:
+        $result = pg_query_params($link, "select *, artysta.id as ida from eksponat left outer join artysta on eksponat.idtworca = artysta.id where eksponat.id = $1", array($_GET["id"]));
+        $num = pg_numrows($result);
+        
+        if ($num == 0) {
+          echo "    <font color=\"red\">Błędne id.</font>";
+        }
+        else {
+          $row = pg_fetch_array($result, 0);
+          
+          echo "    <table id=\"t_exhibits_id\">\n";
+
+          echo "      <tr>\n";
+          echo "        <th>tytuł</th>\n";
+          echo "        <td><i>" . $row["tytul"] . "</i></td>\n";
+          echo "      </tr>\n";
+          $ida = $row["ida"];
+          echo "      <tr>\n";
+          echo "        <th>autor</th>\n";
+          echo "        <td onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">" . $row["imie"] . " " . $row["nazwisko"] . "</td>\n";
+          echo "      </tr>\n";
+          echo "      <tr>\n";
+          echo "        <th>typ</th>\n";
+          echo "        <td>" . $row["typ"] . "</td>\n";
+          echo "      </tr>\n";
+          echo "      <tr>\n";
+          echo "        <th>wysokość<br>szerokość<br>waga</th>\n";
+          echo "        <td>" . $row["wysokosc"] . "cm<br>" . $row["szerokosc"] . "cm<br>" . $row["waga"] . "kg</td>\n";
+          echo "      </tr>\n";
+          
+          echo "    </table>\n";
+        }
+        
+        $back = "javascript:history.back()";
+    }
+    
+    echo "\n\n";
+    pg_close($link);
+    
+    echo "    <form action=\"$back\" method=post>\n";
+    echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n";
+    echo "    </form>\n\n";
+    
+    
+    break;
+
+
+
+### Artyści
+  case "artists":
+    $header = "Artyści";
+    include "./header.php";
+    echo "    <div class=\"header\">\n      $header\n    </div>\n\n";
+    
+    $link = pg_connect("host=labdb dbname=mrbd user=kd370826 password=$mypassword");
+    
+    switch ($_GET["id"]) {
+    
+    ## index
+      case "":
+        $result = pg_query_params($link, "select * from artysta order by nazwisko", array());
+        $num = pg_numrows($result);
+        
+        $tableId = "t_artists";
+        echo "    <table id=\"$tableId\">\n";
+        echo "      <tr>\n";
+        echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">imię</th>\n";
+        echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">nazwisko</th>\n";
+        echo "        <th onclick=\"sortTable('$tableId', 2)\" class=\"t_th_pointer\">rok urodzenia, śmierci</th>\n";
+        echo "      </tr>\n";
+        
+        for ($i = 0; $i < $num; $i++) {
+          $row = pg_fetch_array($result, $i);
+          
+          $ida = $row["id"];
+          echo "      <tr>\n";
+          echo "        <td onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">" . $row["imie"] . "</td>\n";
+          echo "        <td onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">" . $row["nazwisko"] . "</td>\n";
+          echo "        <td>" . $row["rokurodzenia"] . ", " . $row["roksmierci"] . "</td>\n";
+          echo "      </tr>\n";
+        }
+        
+        echo "    </table>\n";
+        $back = "./appadmin.php";
+        
+        break;
+
+    ## id
+      default:
+        $result = pg_query_params($link, "select *, eksponat.id as ide from eksponat right outer join artysta on eksponat.idtworca = artysta.id where artysta.id = $1", array($_GET["id"]));
+        $num = pg_numrows($result);
+        
+        if ($num == 0) {
+          echo "    <font color=\"red\">Błędne id.</font>";
+        }
+        else {
+          $row = pg_fetch_array($result, 0);
+          
+          echo "    <table id=\"t_artists_id\">\n";
+
+          echo "      <tr>\n";
+          echo "        <th>imię i nazwisko</th>\n";
+          echo "        <td>" . $row["imie"] . " " . $row["nazwisko"] .  "</td>\n";
+          echo "      </tr>\n";
+          echo "      <tr>\n";
+          echo "        <th>rok urodzenia, śmierci</th>\n";
+          echo "        <td>" . $row["rokurodzenia"] . ", " . $row["roksmierci"] . "</td>\n";
+          echo "      </tr>\n";
+          
+          echo "    </table>\n";
+          
+          
+          echo "    <br><br>";
+          echo "    Eksponaty artysty w naszym muzeum:<br><br>\n";
+          
+          $tableId = "t_artists_id_exhibits";
+          echo "    <table id=\"$tableId\">\n";
+          echo "      <tr>\n";
+          echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
+          echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">typ</th>\n";
+          echo "      </tr>\n";
+          
+          for ($i = 0; $i < $num; $i++) {
+            $row = pg_fetch_array($result, $i);
+            
+            $ide = $row["ide"];
+            echo "      <tr>\n";
+            echo "        <td onclick=\"javascript:location.href='?table=exhibits&id=$ide'\" class=\"t_td_pointer\"><i>" . $row["tytul"] . "</i></td>\n";
+            echo "        <td>" . $row["typ"] . "</td>\n";
+            echo "      </tr>\n";
+          }
+          
+          echo "    </table>\n";
+      
+        }
+        
+        $back = "javascript:history.back()";
+    }
+    echo "\n\n";
+    pg_close($link);
+    
+    
+    echo "    <form action=\"$back\" method=post>\n";
+    echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n";
+    echo "    </form>\n\n";
+    
+    break;
+
+
+### Galerie
+  case "galleries":
+    $header = "Galerie";
+    include "./header.php";
+    echo "    <div class=\"header\">\n      $header\n    </div>\n\n";
+    
+    $link = pg_connect("host=labdb dbname=mrbd user=kd370826 password=$mypassword");
+    
+    switch ($_GET["id"]) {
+    
+    ## index
+      case "":
+        $result = pg_query_params($link, "select * from galeria order by nazwa", array());
+        $num = pg_numrows($result);
+        
+        $tableId = "t_galleries";
+        echo "    <table id=\"$tableId\">\n";
+        echo "      <tr>\n";
+        echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">nazwa</th>\n";
+        echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">sale</th>\n";
+        echo "      </tr>\n";
+        
+        for ($i = 0; $i < $num; $i++) {
+          $row = pg_fetch_array($result, $i);
+          
+          $idg = $row["id"];
+          echo "      <tr>\n";
+          echo "        <td onclick=\"javascript:location.href='?table=galleries&id=$idg'\" class=\"t_td_pointer\">" . $row["nazwa"] . "</td>\n";
+          echo "        <td>";
+          
+          $rooms = pg_query_params($link, "select nr from sala where idgaleria = $1 order by nr", array($idg));
+          for ($j = 0; $j < pg_numrows($rooms) - 1; $j++) {
+            $room = pg_fetch_array($rooms, $j);
+            echo $room["nr"] . ", ";
+          }
+          $room = pg_fetch_array($rooms, pg_numrows($rooms) - 1);
+          echo $room["nr"];
+          
+          echo "</td>\n";
+          echo "      </tr>\n";
+        }
+        
+        echo "    </table>\n";
+        $back = "./appadmin.php";
+        
+        break;
+
+    ## id
+      default:
+        
+        switch($_GET["room"]) {
+          
+        # index
+          case "":
+            $result = pg_query_params($link, "select * from galeria where id = $1", array($_GET["id"]));
+            $num = pg_numrows($result);
+          
+            if ($num == 0) {
+              echo "    <font color=\"red\">Błędne id.</font>";
+            }
+            else {
+              $row = pg_fetch_array($result, 0);
+              
+              echo "    <table id=\"t_galleries_id\">\n";
+
+              echo "      <tr>\n";
+              echo "        <th>nazwa</th>\n";
+              echo "        <td>" . $row["nazwa"] . "</td>\n";
+              echo "      </tr>\n";
+              
+              echo "    </table>\n";
+              
+              echo "    <br><br>";
+              echo "    Sale znajdujące się w tej galerii:<br><br>\n";
+              
+              $tableId = "t_galleries_id_rooms";
+              echo "    <table id=\"$tableId\">\n";
+              echo "      <tr>\n";
+              echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">nr</th>\n";
+              echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">pojemność</th>\n";
+              echo "      </tr>\n";
+              
+              $rooms = pg_query_params($link, "select * from sala  where idgaleria = $1 order by nr", array($_GET["id"]));
+              $num = pg_numrows($rooms);
+              
+              $row = pg_fetch_array($rooms, 0);
+              $idg = $row["idgaleria"];
+              for ($i = 0; $i < $num; $i++) {
+                $row = pg_fetch_array($rooms, $i);
+                
+                $nr=$row["nr"];
+                echo "      <tr>\n";
+                echo "        <td onclick=\"javascript:location.href='?table=galleries&id=$idg&room=$nr'\" class=\"t_td_pointer\">" . $nr . "</td>\n";
+                echo "        <td>" . $row["pojemnosc"] . "</td>\n";
+                echo "      </tr>\n";
+              }
+              
+              echo "    </table>\n";
+            }
+        
+
+            break;
+        
+        # nr
+          default:
+            $result = pg_query_params($link, "select * from sala where idgaleria = $1 and nr = $2", array($_GET["id"], $_GET["room"]));
+            $num = pg_numrows($result);
+          
+            if ($num == 0) {
+              echo "    <font color=\"red\">Błędne id / nr sali.</font>";
+            }
+            else {
+              echo "    Galeria " . $_GET["id"] . ", sala " . $_GET["room"] . ".<br><br>Tu coś będzie (jak mi się będzie chciało lol).\n";
+#              $row = pg_fetch_array($result, 0);
+#              
+#              echo "    <table id=\"t_galleries_id\">\n";
+
+#              echo "      <tr>\n";
+#              echo "        <th>nazwa</th>\n";
+#              echo "        <td>" . $row["nazwa"] . "</td>\n";
+#              echo "      </tr>\n";
+#              
+#              echo "    </table>\n";
+#              
+#              echo "    <br><br>";
+#              echo "    Sale znajdujące się w tej galerii:<br><br>\n";
+#              
+#              $tableId = "t_galleries_id_rooms";
+#              echo "    <table id=\"$tableId\">\n";
+#              echo "      <tr>\n";
+#              echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">nr</th>\n";
+#              echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">pojemność</th>\n";
+#              echo "      </tr>\n";
+#              
+#              $rooms = pg_query_params($link, "select * from sala  where idgaleria = $1 order by nr", array($_GET["id"]));
+#              $num = pg_numrows($rooms);
+#              
+#              $row = pg_fetch_array($rooms, 0);
+#              $idg = $row["idgaleria"];
+#              for ($i = 0; $i < $num; $i++) {
+#                $row = pg_fetch_array($rooms, $i);
+#                
+#                $nr=$row["nr"];
+#                echo "      <tr>\n";
+#                echo "        <td onclick=\"javascript:location.href='?table=galleries&id=$idg&room=$nr'\" class=\"t_td_pointer\">" . $nr . "</td>\n";
+#                echo "        <td>" . $row["pojemnosc"] . "</td>\n";
+#                echo "      </tr>\n";
+#              }
+#              
+#              echo "    </table>\n";
+            }
+        
+        }
+      
+      
+        
+        
+        $back = "javascript:history.back()";
+    }
+    echo "\n\n";
+    pg_close($link);
+    
+    
+    echo "    <form action=\"$back\" method=post>\n";
+    echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n";
+    echo "    </form>\n\n";
+    
+    break;
+
+### Wystawy objazdowe
+  case "tour":
+    $header = "Wystawy objazdowe";
+    include "./header.php";
+    echo "    <div class=\"header\">\n      $header\n    </div>\n\n";
+    
+    $link = pg_connect("host=labdb dbname=mrbd user=kd370826 password=$mypassword");
+    $result = pg_query_params($link, "select * from wystawaobjazdowa", array());
+    $num = pg_numrows($result);
+    
+    $tableId = "t_tour";
+    echo "    <table id=\"$tableId\">\n";
+    echo "      <tr>\n";
+    echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">miasto</th>\n";
+    echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">data rozpoczęcia, zakończenia</th>\n";
+    echo "      </tr>\n";
+    
+    for ($i = 0; $i < $num; $i++) {
+      $row = pg_fetch_array($result, $i);
+      
+      echo "      <tr>\n";
+      echo "        <td>" . $row["miasto"] . "</td>\n";
+      echo "        <td>" . "###" . ", " . "###" . "</td>\n";
+      echo "      </tr>\n";
+    }
+    
+    echo "    </table>\n";
+    
+    echo "\n\n";
+    pg_close($link);
+    
+    
+    echo "    <form action=\"./appadmin.php\" method=post>\n";
+    echo "      <input type=\"submit\" name=\"button\" value=\"Powrót\">\n";
+    echo "    </form>\n\n";
+    
+    break;
+    
+### index
+  case "":
+
+    $header = "Witamy w aplikacji muzeum.";
+    include "./header.php";
+    echo "    <div class=\"header\">\n      $header\n    </div>\n\n";
+    
+#    echo "    <form action=\"./logout.php\" method=post>\n\n";
+#    echo "      <input type=\"submit\" name=\"button\" value=\"Wyloguj się\">\n\n";
+#    echo "    </form>\n\n";
+    
+    echo "    <div class=\"tiny\">\n";
+
+    echo "      <form method=post>\n";
+    echo "        <input type=\"submit\" name=\"button\" formaction=\"http://students.mimuw.edu.pl/~kd370826/bazy-danych/\" value=\"Strona główna\">\n";
+    echo "        <input type=\"submit\" name=\"button\" formaction=\"./logout.php\" value=\"Wyloguj się\">\n\n";
+    echo "      </form>\n";
+
+    echo "    </div>\n\n";
+    echo "    <div style=\"margin-top: 20px;\"></div>\n\n";
+
+    
+    echo "    <a href=\"?table=#\">\n      <div class=\"relation_admin\">\n        wyświetl<br>ekspozycje\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=exhibits\">\n      <div class=\"relation_admin\">\n        wyświetl<br>eksponaty\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=artists\">\n      <div class=\"relation_admin\">\n        wyświetl<br>artystów\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=galleries\">\n      <div class=\"relation_admin\">\n        wyświetl<br>galerie\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=tour\">\n      <div class=\"relation_admin\">\n        wyświetl<br>objazdy\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=#\">\n      <div class=\"relation_admin\">\n        dodaj<br>ekspozycję\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=#\">\n      <div class=\"relation_admin\">\n        dodaj<br>eksponat\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=#\">\n      <div class=\"relation_admin\">\n        dodaj<br>artystę\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=#\">\n      <div class=\"relation_admin\">\n        dodaj<br>salę\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=#\">\n      <div class=\"relation_admin\">\n        dodaj<br>galerię\n      </div>\n    </a>\n\n";
+    echo "    <a href=\"?table=#\">\n      <div class=\"relation_admin\">\n        dodaj<br>objazd\n      </div>\n    </a>\n\n";
+    
+    
+    echo "    <div style=\"margin-top: 80px;\"></div>\n\n";
+#    echo "    <div class=\"tiny\">\n";
+
+#    $cookie_name = "user";
+#    if (isset($_COOKIE[$cookie_name])) {
+#      echo "      Jesteś zalogowany jako: " . $_COOKIE[$cookie_name] . "\n";
+#      echo "      <form action=\"./appadmin.php\" method=post>\n";
+#      echo "        <input type=\"submit\" name=\"button\" value=\"Wersja dla pracownika\">\n";
+#      echo "      </form>\n";
+#    }
+#    else {
+#      echo "      <form action=\"./login.php\" method=post>\n";
+#      echo "        <input type=\"submit\" name=\"button\" value=\"Jestem pracownikiem\">\n";
+#      echo "      </form>\n";
+#    }
+
+#    echo "    </div>\n";
+    
+    break;
+
+### wrong url
+  default:
+    header("Location: ./appadmin.php");
+}
+
+if ($_GET["table"] != "" && $_GET["id"] != "") {
+  echo "    <div class=\"tiny\">\n";
+  echo "      <form action=\"./appadmin.php\" method=post>\n";
+  echo "        <input type=\"submit\" name=\"button\" value=\"Strona główna aplikacji\">\n";
+  echo "      </form>\n";
+  echo "    </div>\n\n";
+}
+
+
+
+
 
 footer:
 include "./footer.php";

@@ -17,7 +17,7 @@ if (!isset($_COOKIE[$cookie_name])) {
 
 $login = $_COOKIE[$cookie_name];
 unset($_COOKIE[$cookie_name]);
-setcookie($cookie_name, null, -1, './');
+setcookie($cookie_name, null, -1, '/'); # "./" not working on apple devices
 
 include "./header.php";
 echo "    Wylogowano: $login.\n\n";
