@@ -33,6 +33,7 @@ insert into WystawaObjazdowa(id, miasto) values(3, 'Wrocław');
 insert into WystawaObjazdowa(id, miasto) values(4, 'Kraków');
 
 
+insert into Ekspozycja(id, idEksponat, idGaleria, nrSala, idWystawaObjazdowa, dataRozpoczecia, dataZakonczenia) values(1, 2, 1, 3, null, '2018-06-14', '2018-07-23');
 
 --insert into Artysta(id, imie, nazwisko, rokUrodzenia, rokSmierci) values();
 --insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values();
