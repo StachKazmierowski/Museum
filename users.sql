@@ -7,6 +7,6 @@ create table users (
 
 insert into users(login, password) values('admin', 'admin1');
 
-grant usage on schema kd370826 to scott;
-grant select on users to scott;
+--grant usage on schema kd370826 to scott;
+--grant select on users to scott;
 
