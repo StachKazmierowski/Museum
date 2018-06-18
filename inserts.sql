@@ -27,20 +27,21 @@ insert into Sala(nr, pojemnosc, idGaleria) values(2, 11, 2);
 insert into Sala(nr, pojemnosc, idGaleria) values(100, 13, 3);
 
 
-insert into WystawaObjazdowa(id, miasto) values(1, 'Warszafka');
-insert into WystawaObjazdowa(id, miasto) values(2, 'Kraków');
-insert into WystawaObjazdowa(id, miasto) values(3, 'Wrocław');
-insert into WystawaObjazdowa(id, miasto) values(4, 'Kraków');
+insert into WystawaObjazdowa(id, miasto, dataRozpoczecia, dataZakonczenia) values(1, 'Warszafka', '2018-05-21', '2018-06-21');
+insert into WystawaObjazdowa(id, miasto, dataRozpoczecia, dataZakonczenia) values(2, 'Kraków', '2018-07-01', '2018-07-14');
+insert into WystawaObjazdowa(id, miasto, dataRozpoczecia, dataZakonczenia) values(3, 'Wrocław', '2018-06-17', '2018-06-30');
+insert into WystawaObjazdowa(id, miasto, dataRozpoczecia, dataZakonczenia) values(4, 'Kraków', '2018-07-07', '2018-07-31');
 
 
 insert into Ekspozycja(id, idEksponat, idGaleria, nrSala, idWystawaObjazdowa, dataRozpoczecia, dataZakonczenia) values(1, 2, 1, 3, null, '2018-06-14', '2018-07-23');
 insert into Ekspozycja(id, idEksponat, idGaleria, nrSala, idWystawaObjazdowa, dataRozpoczecia, dataZakonczenia) values(3, 5, 1, 1, null, '2018-06-16', '2018-07-23');
 insert into Ekspozycja(id, idEksponat, idGaleria, nrSala, idWystawaObjazdowa, dataRozpoczecia, dataZakonczenia) values(4, 6, null, null, 3, '2018-06-13', '2018-07-01');
 
+
 --insert into Artysta(id, imie, nazwisko, rokUrodzenia, rokSmierci) values();
 --insert into Eksponat(id, tytul, typ, wysokosc, szerokosc, waga, idTworca) values();
 --insert into Galeria(id, nazwa) values();
 --insert into Sala(nr, pojemnosc, idGaleria) values();
---insert into WystawaObjazdowa(id, miasto) values();
+--insert into WystawaObjazdowa(id, miasto, dataRozpoczecia, dataZakonczenia) values();
 --insert into Ekspozycja(id, idEksponat, idGaleria, nrSala, idWystawaObjazdowa, dataRozpoczecia, dataZakonczenia) values();
 

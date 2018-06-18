@@ -3,7 +3,7 @@
 $mypassword = ""; # hidden ;)
 
 $stylesheet = "app.css";
-$script = "sortTable.js";
+$script = "script.js";
 $title = "Aplikacja dla gościa";
 
 switch ($_GET["table"]) {
@@ -29,9 +29,9 @@ switch ($_GET["table"]) {
         $tableId = "t_exhibits";
         echo "    <table id=\"$tableId\">\n";
         echo "      <tr>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">autor</th>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 2)\" class=\"t_th_pointer\">typ</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 1)\" class=\"t_th_pointer\">autor</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 2)\" class=\"t_th_pointer\">typ</th>\n";
         echo "      </tr>\n";
         
         for ($i = 0; $i < $num; $i++) {
@@ -42,7 +42,11 @@ switch ($_GET["table"]) {
           $ida = $row["ida"];
           echo "      <tr>\n";
           echo "        <td onclick=\"javascript:location.href='?table=exhibits&id=$ide'\" class=\"t_td_pointer\"><i>" . $row["tytul"] . "</i></td>\n";
-          echo "        <td onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">" . $row["imie"] . " " . $row["nazwisko"] . "</td>\n";
+          
+          $onclick = ($ida == "") ? ">" : " onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">";
+          $str = ($ida == "") ? "-" : $row["imie"] . " " . $row["nazwisko"];
+          echo "        <td" . $onclick . $str . "</td>\n";
+
           echo "        <td>" . $row["typ"] . "</td>\n";
           echo "      </tr>\n";
         }
@@ -73,7 +77,11 @@ switch ($_GET["table"]) {
           $ida = $row["ida"];
           echo "      <tr>\n";
           echo "        <th>autor</th>\n";
-          echo "        <td onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">" . $row["imie"] . " " . $row["nazwisko"] . "</td>\n";
+          
+          $onclick = ($ida == "") ? ">" : " onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">";
+          $str = ($ida == "") ? "-" : $row["imie"] . " " . $row["nazwisko"];
+          echo "        <td" . $onclick . $str . "</td>\n";
+          
           echo "      </tr>\n";
           echo "      <tr>\n";
           echo "        <th>typ</th>\n";
@@ -85,6 +93,31 @@ switch ($_GET["table"]) {
           echo "      </tr>\n";
           
           echo "    </table>\n";
+          
+          echo "    <br><br>\n\n";
+
+          $result = pg_query_params($link, "select *, galeria.id as idg from ((ekspozycja join eksponat on ekspozycja.ideksponat = eksponat.id) left join (sala left join galeria on sala.idgaleria = galeria.id) on ekspozycja.nrsala = sala.nr and ekspozycja.idgaleria = sala.idgaleria) left join wystawaobjazdowa on ekspozycja.idwystawaobjazdowa = wystawaobjazdowa.id where ekspozycja.ideksponat = $1 and ekspozycja.datarozpoczecia <= current_date and current_date <= ekspozycja.datazakonczenia", array($_GET["id"]));
+          $num = pg_numrows($result);
+        
+          if ($num == 0) {
+            echo "    Obecnie nie ma możliwości obejrzenia tego eksponatu,<br>gdyż znajduje się on w magazynie.\n";
+          }
+          else {
+            echo "    Eksponat ten znajduje się obecnie ";
+            
+            $row = pg_fetch_array($result, 0);
+          
+            if ($row["idwystawaobjazdowa"] == "") {
+              $idg = $row["idg"];
+              $nrsala = $row["nr"];
+              echo "w <a class=\"hoverable\" href=\"?table=galleries&id=$idg\">galerii " . $row["nazwa"] . "</a>, w <a class=\"hoverable\" href=\"?table=galleries&id=$idg&room=$nrsala\">sali nr " . $row["nr"] . "</a>.\n";
+            }
+            else {
+              $idw = $row["idwystawaobjazdowa"];
+              echo "na <a class=\"hoverable\" href=\"?table=tour&id=$idw\">wystawie objazdowej w mieście " . $row["miasto"] . "</a>.\n";
+            }
+          }
+
         }
         
         $back = "javascript:history.back()";
@@ -122,9 +155,9 @@ switch ($_GET["table"]) {
         $tableId = "t_artists";
         echo "    <table id=\"$tableId\">\n";
         echo "      <tr>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">imię</th>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">nazwisko</th>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 2)\" class=\"t_th_pointer\">rok urodzenia, śmierci</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 0)\" class=\"t_th_pointer\">imię</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 1)\" class=\"t_th_pointer\">nazwisko</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 2)\" class=\"t_th_pointer\">rok urodzenia, śmierci</th>\n";
         echo "      </tr>\n";
         
         for ($i = 0; $i < $num; $i++) {
@@ -134,7 +167,8 @@ switch ($_GET["table"]) {
           echo "      <tr>\n";
           echo "        <td onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">" . $row["imie"] . "</td>\n";
           echo "        <td onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">" . $row["nazwisko"] . "</td>\n";
-          echo "        <td>" . $row["rokurodzenia"] . ", " . $row["roksmierci"] . "</td>\n";
+          $str = $row["roksmierci"] == "" ? "-" : $row["roksmierci"];
+          echo "        <td>" . $row["rokurodzenia"] . ", " . $str . "</td>\n";
           echo "      </tr>\n";
         }
         
@@ -163,7 +197,8 @@ switch ($_GET["table"]) {
           echo "      </tr>\n";
           echo "      <tr>\n";
           echo "        <th>rok urodzenia, śmierci</th>\n";
-          echo "        <td>" . $row["rokurodzenia"] . ", " . $row["roksmierci"] . "</td>\n";
+          $str = $row["roksmierci"] == "" ? "-" : $row["roksmierci"];
+          echo "        <td>" . $row["rokurodzenia"] . ", " . $str . "</td>\n";
           echo "      </tr>\n";
           
           echo "    </table>\n";
@@ -178,8 +213,8 @@ switch ($_GET["table"]) {
             $tableId = "t_artists_id_exhibits";
             echo "    <table id=\"$tableId\">\n";
             echo "      <tr>\n";
-            echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
-            echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">typ</th>\n";
+            echo "        <th onclick=\"sortTableAlphabetically('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
+            echo "        <th onclick=\"sortTableAlphabetically('$tableId', 1)\" class=\"t_th_pointer\">typ</th>\n";
             echo "      </tr>\n";
             
             for ($i = 0; $i < $num; $i++) {
@@ -230,8 +265,8 @@ switch ($_GET["table"]) {
         $tableId = "t_galleries";
         echo "    <table id=\"$tableId\">\n";
         echo "      <tr>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">nazwa</th>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">sale</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 0)\" class=\"t_th_pointer\">nazwa</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 1)\" class=\"t_th_pointer\">sale</th>\n";
         echo "      </tr>\n";
         
         for ($i = 0; $i < $num; $i++) {
@@ -299,8 +334,8 @@ switch ($_GET["table"]) {
                 $tableId = "t_galleries_id_rooms";
                 echo "    <table id=\"$tableId\">\n";
                 echo "      <tr>\n";
-                echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">nr</th>\n";
-                echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">pojemność</th>\n";
+                echo "        <th onclick=\"sortTableNumerically('$tableId', 0)\" class=\"t_th_pointer\">nr</th>\n";
+                echo "        <th onclick=\"sortTableNumerically('$tableId', 1)\" class=\"t_th_pointer\">pojemność</th>\n";
                 echo "      </tr>\n";
                 
                 $row = pg_fetch_array($rooms, 0);
@@ -364,9 +399,9 @@ switch ($_GET["table"]) {
                 $tableId = "t_galleries_id_rooms_nr";
                 echo "    <table id=\"$tableId\">\n";
                 echo "      <tr>\n";
-                echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
-                echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">autor</th>\n";
-                echo "        <th onclick=\"sortTable('$tableId', 2)\" class=\"t_th_pointer\">typ</th>\n";
+                echo "        <th onclick=\"sortTableAlphabetically('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
+                echo "        <th onclick=\"sortTableAlphabetically('$tableId', 1)\" class=\"t_th_pointer\">autor</th>\n";
+                echo "        <th onclick=\"sortTableAlphabetically('$tableId', 2)\" class=\"t_th_pointer\">typ</th>\n";
                 echo "      </tr>\n";
                 
                 for ($i = 0; $i < $num; $i++) {
@@ -421,8 +456,8 @@ switch ($_GET["table"]) {
         $tableId = "t_tour";
         echo "    <table id=\"$tableId\">\n";
         echo "      <tr>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">miasto</th>\n";
-        echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">data rozpoczęcia, zakończenia</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 0)\" class=\"t_th_pointer\">miasto</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 1)\" class=\"t_th_pointer\">data rozpoczęcia, zakończenia</th>\n";
         echo "      </tr>\n";
         
         for ($i = 0; $i < $num; $i++) {
@@ -431,7 +466,7 @@ switch ($_GET["table"]) {
           $idw = $row["id"];
           echo "      <tr>\n";
           echo "        <td onclick=\"javascript:location.href='?table=tour&id=$idw'\" class=\"t_td_pointer\">" . $row["miasto"] . "</td>\n";
-          echo "        <td>" . "#TODO: uzupełnić" . ", " . "#TODO: uzupełnić" . "</td>\n";
+          echo "        <td>" . $row["datarozpoczecia"] . ", " . $row["datazakonczenia"] . "</td>\n";
           echo "      </tr>\n";
         }
         
@@ -461,11 +496,11 @@ switch ($_GET["table"]) {
           echo "      </tr>\n";
           echo "      <tr>\n";
           echo "        <th>data rozpoczęcia</th>\n";
-          echo "        <td>" . "#TODO: uzupełnić" . "</td>\n";
+          echo "        <td>" . $row["datarozpoczecia"] . "</td>\n";
           echo "      </tr>\n";
           echo "      <tr>\n";
           echo "        <th>data zakończenia</th>\n";
-          echo "        <td>" . "#TODO: uzupełnić" . "</td>\n";
+          echo "        <td>" . $row["datazakonczenia"] . "</td>\n";
           echo "      </tr>\n";
           
           echo "    </table>\n";
@@ -473,7 +508,7 @@ switch ($_GET["table"]) {
           echo "    <br><br>\n\n";
           echo "    Eksponaty obecne na tej wystawie:<br><br>\n\n";
           
-          $result = pg_query_params($link, "select tytul, eksponat.id as ide, artysta.id as ida, imie, nazwisko, typ, datarozpoczecia, datazakonczenia from (ekspozycja join (eksponat left join artysta on eksponat.idtworca = artysta.id) on ekspozycja.ideksponat = eksponat.id) left join wystawaobjazdowa on ekspozycja.idwystawaobjazdowa = wystawaobjazdowa.id where ekspozycja.idwystawaobjazdowa is not null and ekspozycja.idwystawaobjazdowa = $1 order by ekspozycja.id", array($_GET["id"]));
+          $result = pg_query_params($link, "select tytul, eksponat.id as ide, artysta.id as ida, imie, nazwisko, typ, ekspozycja.datarozpoczecia as dr, ekspozycja.datazakonczenia as dz from (ekspozycja join (eksponat left join artysta on eksponat.idtworca = artysta.id) on ekspozycja.ideksponat = eksponat.id) left join wystawaobjazdowa on ekspozycja.idwystawaobjazdowa = wystawaobjazdowa.id where ekspozycja.idwystawaobjazdowa is not null and ekspozycja.idwystawaobjazdowa = $1 order by ekspozycja.id", array($_GET["id"]));
           $num = pg_numrows($result);
           
           if ($num == 0) {
@@ -483,11 +518,11 @@ switch ($_GET["table"]) {
             $tableId = "t_tour_id_exhibits";
             echo "    <table id=\"$tableId\">\n";
             echo "      <tr>\n";
-            echo "        <th onclick=\"sortTable('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
-            echo "        <th onclick=\"sortTable('$tableId', 1)\" class=\"t_th_pointer\">autor</th>\n";
-            echo "        <th onclick=\"sortTable('$tableId', 2)\" class=\"t_th_pointer\">typ</th>\n";
-            echo "        <th onclick=\"sortTable('$tableId', 3)\" class=\"t_th_pointer\">początek<br>pobytu</th>\n";
-            echo "        <th onclick=\"sortTable('$tableId', 4)\" class=\"t_th_pointer\">koniec<br>pobytu</th>\n";
+            echo "        <th onclick=\"sortTableAlphabetically('$tableId', 0)\" class=\"t_th_pointer\">tytuł</th>\n";
+            echo "        <th onclick=\"sortTableAlphabetically('$tableId', 1)\" class=\"t_th_pointer\">autor</th>\n";
+            echo "        <th onclick=\"sortTableAlphabetically('$tableId', 2)\" class=\"t_th_pointer\">typ</th>\n";
+            echo "        <th onclick=\"sortTableAlphabetically('$tableId', 3)\" class=\"t_th_pointer\">początek<br>pobytu</th>\n";
+            echo "        <th onclick=\"sortTableAlphabetically('$tableId', 4)\" class=\"t_th_pointer\">koniec<br>pobytu</th>\n";
             echo "      </tr>\n";
             
             for ($i = 0; $i < $num; $i++) {
@@ -499,8 +534,8 @@ switch ($_GET["table"]) {
               echo "        <td onclick=\"javascript:location.href='?table=exhibits&id=$ide'\" class=\"t_td_pointer\"><i>" . $row["tytul"] . "</i></td>\n";
               echo "        <td onclick=\"javascript:location.href='?table=artists&id=$ida'\" class=\"t_td_pointer\">" . $row["imie"] . " " . $row["nazwisko"] . "</td>\n";
               echo "        <td>" . $row["typ"] . "</td>\n";
-              echo "        <td>" . $row["datarozpoczecia"] . "</td>\n";
-              echo "        <td>" . $row["datazakonczenia"] . "</td>\n";
+              echo "        <td>" . $row["dr"] . "</td>\n";
+              echo "        <td>" . $row["dz"] . "</td>\n";
               echo "      </tr>\n";
             }
             

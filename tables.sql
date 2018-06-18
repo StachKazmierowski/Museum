@@ -14,7 +14,7 @@ create table Artysta (
   nazwisko varchar(15) not null,
   rokUrodzenia int not null,
   rokSmierci int,
-  constraint checkArtystaDaty check (rokSmierci is NULL or rokUrodzenia <= rokSmierci));
+  constraint checkDates check (rokSmierci is NULL or rokUrodzenia <= rokSmierci));
 
 create table Eksponat (
   id serial primary key,
@@ -24,22 +24,25 @@ create table Eksponat (
   szerokosc int not null,
   waga int not null,
   idTworca int references Artysta,
-  constraint checkEksponatWymiary check (wysokosc >= 0 and szerokosc >= 0 and waga > 0));
+  constraint checkDimensions check (wysokosc >= 0 and szerokosc >= 0 and waga > 0));
 
 create table Galeria (
   id serial primary key,
-  nazwa varchar(30) not null);
+  nazwa varchar(30) unique not null);
 
 create table Sala (
   nr int not null,
   pojemnosc int not null,
   idGaleria int not null references Galeria,
   primary key (nr, idGaleria),
-  constraint checkSalaPojemosc check (pojemnosc >= 0));
+  constraint checkCapacity check (pojemnosc >= 0));
 
 create table WystawaObjazdowa (
   id serial primary key,
-  miasto varchar(30) not null);
+  miasto varchar(30) not null,
+  dataRozpoczecia date not null,
+  dataZakonczenia date not null,
+  constraint checkDates check (dataRozpoczecia <= dataZakonczenia));
 
 create table Ekspozycja (
   id serial primary key,
@@ -49,7 +52,7 @@ create table Ekspozycja (
   foreign key (idGaleria, nrSala) references Sala(idGaleria, nr),
   idWystawaObjazdowa int references WystawaObjazdowa,
   dataRozpoczecia date not null,
-  dataZakonczenia date,
-  constraint checkEkspozycjaDaty check (dataZakonczenia is null or dataRozpoczecia <= dataZakonczenia),
-  constraint checkEkspozycjaMiejsce check ((idGaleria is null and nrSala is null and idWystawaObjazdowa is not null and dataZakonczenia is not null) or (idGaleria is not null and nrSala is not null and idWystawaObjazdowa is null)));
+  dataZakonczenia date not null,
+  constraint checkDates check (dataRozpoczecia <= dataZakonczenia),
+  constraint checkPlace check ((idGaleria is null and nrSala is null and idWystawaObjazdowa is not null) or (idGaleria is not null and nrSala is not null and idWystawaObjazdowa is null)));
 
