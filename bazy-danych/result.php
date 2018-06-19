@@ -28,7 +28,7 @@ switch ($_POST["table"]) {
 
 
 
-### Eksponaty
+### Ekspozycje
   case "exhibitions":
     $link = pg_connect("host=labdb dbname=mrbd user=kd370826 password=$mypassword");
     
@@ -64,7 +64,39 @@ switch ($_POST["table"]) {
       }
       echo ";<br>data rozpoczęcia: " . $_POST["datarozpoczecia"] . "; data zakończenia: " . $_POST["datazakonczenia"] . ".\n";
       
-      $back = "./appadmin?table=exhibitions";
+      $back = "./appadmin.php?table=exhibitions";
+    }
+    else {
+      echo "    <font color=\"red\">Nie udało się.</font><br>\n";
+      echo pg_last_error($link) . "<br>\n";
+      
+      $back = "javascript:history.back()";
+      $str = "Spróbuj ponownie";
+    }
+    
+    
+    pg_close($link);
+    
+    
+    break;
+    
+
+
+### Ekspozycje ## edit
+  case "exhibitions_edit":
+    $link = pg_connect("host=labdb dbname=mrbd user=kd370826 password=$mypassword");
+    
+    $ideks = $_POST["ideks"];
+    $dr = $_POST["datarozpoczecia"];
+    $dz = $_POST["datazakonczenia"];
+    $result = pg_query_params($link, "update ekspozycja set datarozpoczecia = $1, datazakonczenia = $2 where id = $3", array($dr, $dz, $ideks));
+
+    if ($result) {
+      echo "    <font color=\"green\">OK</font><br><br>\n";
+      
+      echo "    Zmieniono daty na:<br>data rozpoczęcia: " . $dr . ", data zakończenia: " . $dz . ".\n";
+      
+      $back = "./appadmin.php?table=exhibitions&id=$ideks";
     }
     else {
       echo "    <font color=\"red\">Nie udało się.</font><br>\n";
@@ -105,7 +137,7 @@ switch ($_POST["table"]) {
       }
       echo "; typ: " . $_POST["typ"] . ";<br>wysokość: " . $_POST["wysokosc"] . ", szerokość: " . $_POST["szerokosc"] . ", waga: " . $_POST["waga"] . ".\n";
       
-      $back = "./appadmin?table=exhibits";
+      $back = "./appadmin.php?table=exhibits";
     }
     else {
       echo "    <font color=\"red\">Nie udało się.</font><br>\n";
@@ -140,7 +172,7 @@ switch ($_POST["table"]) {
       $str2 = empty($_POST["roksmierci"]) ? "" : ", " . $_POST["roksmierci"];
       echo "    Dodano artystę: " . $_POST["imie"] . ", " . $_POST["nazwisko"] . ", " . $_POST["rokurodzenia"] . $str2 . ".\n";
       
-      $back = "./appadmin?table=artists";
+      $back = "./appadmin.php?table=artists";
     }
     else {
       echo "    <font color=\"red\">Nie udało się.</font><br>\n";
@@ -168,7 +200,7 @@ switch ($_POST["table"]) {
       echo "    <font color=\"green\">OK</font><br><br>\n";
       echo "    Dodano galerię o nazwie: " . $_POST["nazwa"] . ".\n";
       
-      $back = "./appadmin?table=galleries";
+      $back = "./appadmin.php?table=galleries";
     }
     else {
       echo "    <font color=\"red\">Nie udało się.</font><br>\n";
@@ -201,7 +233,7 @@ switch ($_POST["table"]) {
       echo "    <font color=\"green\">OK</font><br><br>\n";
       echo "    Do galerii $name dodano salę nr " . $_POST["nr"] . " o pojemności " . $_POST["pojemnosc"] . ".\n";
       
-      $back = "./appadmin?table=galleries&id=$idg";
+      $back = "./appadmin.php?table=galleries&id=$idg";
     }
     else {
       echo "    <font color=\"red\">Nie udało się.</font><br>\n";
@@ -228,7 +260,7 @@ switch ($_POST["table"]) {
       echo "    <font color=\"green\">OK</font><br><br>\n";
       echo "    Dodano wystawę objazdową: " . $_POST["miasto"] . ", " . $_POST["datarozpoczecia"] . ", " . $_POST["datazakonczenia"] . ".\n";
       
-      $back = "./appadmin?table=tour";
+      $back = "./appadmin.php?table=tour";
     }
     else {
       echo "    <font color=\"red\">Nie udało się.</font><br>\n";

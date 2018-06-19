@@ -1,5 +1,64 @@
---wyzwalacze
+--tabele
 
+drop table if exists Ekspozycja cascade;
+drop table if exists Sala cascade;
+drop table if exists Galeria cascade;
+drop table if exists WystawaObjazdowa cascade;
+drop table if exists Eksponat cascade;
+drop table if exists Artysta cascade;
+
+
+create table Artysta (
+  id serial primary key,
+  imie varchar(15) not null,
+  nazwisko varchar(15) not null,
+  rokUrodzenia int not null,
+  rokSmierci int,
+  constraint checkDates check (rokSmierci is NULL or rokUrodzenia <= rokSmierci));
+
+create table Eksponat (
+  id serial primary key,
+  tytul varchar(30) not null,
+  typ varchar(20) not null,
+  wysokosc int not null,
+  szerokosc int not null,
+  waga int not null,
+  idTworca int references Artysta,
+  constraint checkDimensions check (wysokosc >= 0 and szerokosc >= 0 and waga > 0));
+
+create table Galeria (
+  id serial primary key,
+  nazwa varchar(30) unique not null);
+
+create table Sala (
+  nr int not null,
+  pojemnosc int not null,
+  idGaleria int not null references Galeria,
+  primary key (nr, idGaleria),
+  constraint checkCapacity check (pojemnosc > 0));
+
+create table WystawaObjazdowa (
+  id serial primary key,
+  miasto varchar(30) not null,
+  dataRozpoczecia date not null,
+  dataZakonczenia date not null,
+  constraint checkDates check (dataRozpoczecia <= dataZakonczenia));
+
+create table Ekspozycja (
+  id serial primary key,
+  idEksponat int not null references Eksponat,
+  idGaleria int,
+  nrSala int,
+  foreign key (idGaleria, nrSala) references Sala(idGaleria, nr),
+  idWystawaObjazdowa int references WystawaObjazdowa,
+  dataRozpoczecia date not null,
+  dataZakonczenia date not null,
+  constraint checkDates check (dataRozpoczecia <= dataZakonczenia),
+  constraint checkPlace check ((idGaleria is null and nrSala is null and idWystawaObjazdowa is not null) or (idGaleria is not null and nrSala is not null and idWystawaObjazdowa is null)));
+
+
+
+--wyzwalacze
 
 ---------------------------------------------
 -- eksponat w dwóch miejscach jednocześnie --
@@ -99,11 +158,6 @@ create or replace function f4 () returns trigger as $$
     end if;
     
     poj := (select pojemnosc from sala where idGaleria = new.idGaleria and nr = new.nrSala);
-    
-    if (poj = 0)
-    then
-      raise exception 'Liczba eksponatów w sali nie może być większa niż jej pojemność.';
-    end if;
     
     create temporary table e1 as select * from ekspozycja where id != new.id and idGaleria is not null and idGaleria = new.idGaleria and nrSala = new.nrSala and least(dataZakonczenia, new.dataZakonczenia) >= greatest(dataRozpoczecia, new.dataRozpoczecia);
     
@@ -289,21 +343,4 @@ create trigger t6 before insert or update
   on Ekspozycja for each row
   execute procedure f6();
 
-
-
-
---------------------------------------------------------------------------
---------------------------------------------------------------------------
-
---create or replace function firstOfJanuary (d date) returns date as $$
---  begin
---    return (select cast(date_trunc('year', d) as date));
---  end;
---$$ language plpgsql;
-
---create or replace function lastOfDecember (d date) returns date as $$
---  begin
---    return (select firstOfJanuary(d) - 1 + interval '1 year');
---  end;
---$$ language plpgsql;
 

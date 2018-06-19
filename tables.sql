@@ -35,7 +35,7 @@ create table Sala (
   pojemnosc int not null,
   idGaleria int not null references Galeria,
   primary key (nr, idGaleria),
-  constraint checkCapacity check (pojemnosc >= 0));
+  constraint checkCapacity check (pojemnosc > 0));
 
 create table WystawaObjazdowa (
   id serial primary key,

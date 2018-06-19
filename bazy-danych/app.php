@@ -100,7 +100,7 @@ switch ($_GET["table"]) {
           $num = pg_numrows($result);
         
           if ($num == 0) {
-            echo "    Obecnie nie ma możliwości obejrzenia tego eksponatu,<br>gdyż znajduje się on w magazynie.\n";
+            echo "    Obecnie nie ma możliwości obejrzenia tego eksponatu,<br>ponieważ znajduje się on w magazynie.\n";
           }
           else {
             echo "    Eksponat ten znajduje się obecnie ";
@@ -372,7 +372,7 @@ switch ($_GET["table"]) {
               echo "    <table id=\"t_galleries_id_rooms_nr\">\n";
 
               echo "      <tr>\n";
-              echo "        <th>nazwa</th>\n";
+              echo "        <th>nazwa galerii</th>\n";
               echo "        <td>" . $row["nazwa"] . "</td>\n";
               echo "      </tr>\n";
               echo "      <tr>\n";
@@ -457,7 +457,8 @@ switch ($_GET["table"]) {
         echo "    <table id=\"$tableId\">\n";
         echo "      <tr>\n";
         echo "        <th onclick=\"sortTableAlphabetically('$tableId', 0)\" class=\"t_th_pointer\">miasto</th>\n";
-        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 1)\" class=\"t_th_pointer\">data rozpoczęcia, zakończenia</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 1)\" class=\"t_th_pointer\">data rozpoczęcia</th>\n";
+        echo "        <th onclick=\"sortTableAlphabetically('$tableId', 2)\" class=\"t_th_pointer\">data zakończenia</th>\n";
         echo "      </tr>\n";
         
         for ($i = 0; $i < $num; $i++) {
@@ -466,7 +467,8 @@ switch ($_GET["table"]) {
           $idw = $row["id"];
           echo "      <tr>\n";
           echo "        <td onclick=\"javascript:location.href='?table=tour&id=$idw'\" class=\"t_td_pointer\">" . $row["miasto"] . "</td>\n";
-          echo "        <td>" . $row["datarozpoczecia"] . ", " . $row["datazakonczenia"] . "</td>\n";
+          echo "        <td>" . $row["datarozpoczecia"] . "</td>\n";
+          echo "        <td>" . $row["datazakonczenia"] . "</td>\n";
           echo "      </tr>\n";
         }
         
