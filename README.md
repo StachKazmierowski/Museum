@@ -2,7 +2,7 @@
 
 Databases task, mimuw  
 
-Task is written in Polish.
+Partly in Polish.
 
 
 Muzeum  
