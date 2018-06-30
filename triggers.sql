@@ -100,11 +100,6 @@ create or replace function f4 () returns trigger as $$
     
     poj := (select pojemnosc from sala where idGaleria = new.idGaleria and nr = new.nrSala);
     
-    if (poj = 0)
-    then
-      raise exception 'Liczba eksponatów w sali nie może być większa niż jej pojemność.';
-    end if;
-    
     create temporary table e1 as select * from ekspozycja where id != new.id and idGaleria is not null and idGaleria = new.idGaleria and nrSala = new.nrSala and least(dataZakonczenia, new.dataZakonczenia) >= greatest(dataRozpoczecia, new.dataRozpoczecia);
     
     for curr in select *
